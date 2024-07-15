@@ -84,3 +84,14 @@ resized_img = cv2.resize(img, (640, 640))
 ```python
 cropped_img = img[120:240, 120:260]
 ```
+
+## Colorspaces
+
+All images loaded by OpenCV are in the **BGR** Format.
+
+```python
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+```
+The ```HSV``` colorspace is very popular among other colorspaces offered by openCV and have a very important application (egs. color detection) in the computer vision field.
