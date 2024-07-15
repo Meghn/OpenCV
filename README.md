@@ -24,8 +24,51 @@
 
 ## Input/Output
 
+- __Image__
+```python
+# read image
+img = cv2.imread(image_path)
+# write image
+cv2.imwrite(image_out_path, img)
+# Visualization
+cv2.imshow('Bird', img)
+cv2.waitKey(0)
+```
+The ```waitKey``` keeps the image open indefinitely untill a key is pressed.
 
+- **Video**
+```python
+# read video
+video = cv2.VideoCapture(video_path)
+# visualize video
+ret = True
+while ret:
+    ret, frame = video.read()
+    if ret:
+        cv2.imshow('Elephant', frame)
+        cv2.waitKey(20)
+```
+Writing a video is slightly more complicated.
+The ```ret``` boolean variable is ``` True``` if there is a frame that can be read else it is ```False```
+The ```waitKey``` is given a number so each frame is open only for that amout of miliseconds. for 25 frames per second that number would be 40 miliseconds.
 
+To release the memory space allocated to the video, always have the below code.
+```python
+video.release()
+cv2.destroyAllWindows()
+```
 
+- **Webcam**
+```python
+# read webcam
+video = cv2.VideoCapture(1)
+# visualize webcam
+while True:
+    ret, frame = video.read()
+    if ret:
+        cv2.imshow('WebCam', frame)
+        if cv2.waitKey(20) & 0xFF == ord('q'):
+            break
+```
 
- 
+The number in the ```VideoCapture``` is the webcam number you want to use. 
