@@ -109,3 +109,36 @@ img_blur = cv2.blur(img, (k_size, k_size))
 img_gaussian_blur = cv2.GaussianBlur(img, (k_size, k_size), 5)
 img_median_blur = cv2.medianBlur(img, k_size)
 ```
+
+## Threshold
+
+![Thresholds](./data/Threshold.png)
+
+We use thresholding for semantic segmentation.
+
+- **Simple Thresholding** : 
+
+    For every pixel the same threshold value is applied.
+
+    We must first convert the colr image into grayscale.
+
+    ```python
+    ret, thresh = cv2.threshold(img_gray, 80, 255, cv2.THRESH_BINARY)
+    ```
+    where ```80``` is the threshold we are going to use where ant pixel value above 80 will become 255(or white) and below 80 will become 0(or black) and ```255``` is the maximum value of a pixel.
+
+    The output may not always be perfect so we just blur the resulting binary image and again send it through a threshold to get a better result.
+    ```python
+    thresh = cv2.blur(thresh, (10, 10))
+    ret, thresh = cv2.threshold(thresh, 80, 255, cv2.THRESH_BINARY)
+    ```
+
+- **Adaptive Thresholding** : 
+    Sometimes there would be shadows and highlights in an image where we cannot use just a single threshold. Hence we use the adaptive threshold.
+
+    ```python
+    adaptive_thresh = cv2.adaptiveThreshold(img_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 30)
+    ```
+    With ```ADAPTIVE_THRESH_GAUSSIAN_C``` the adaptive method and ```THRESH_BINARY``` the threshold type.
+
+    
