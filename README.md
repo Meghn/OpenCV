@@ -95,3 +95,17 @@ img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 ```
 The ```HSV``` colorspace is very popular among other colorspaces offered by openCV and have a very important application (egs. color detection) in the computer vision field.
+
+## Blurring
+
+Helpful to remove noise in an image.
+- __blur__ : Each pixel is the mean of its kernel neighbours
+- __gaussian blur__ : Convolve weach pixel with a gaussian kernel
+- __median blur__ : Central element is replaced by the median of the kernel neighbours. This operation processes the edges while removing noise.
+
+```python
+k_size = 7
+img_blur = cv2.blur(img, (k_size, k_size))
+img_gaussian_blur = cv2.GaussianBlur(img, (k_size, k_size), 5)
+img_median_blur = cv2.medianBlur(img, k_size)
+```
