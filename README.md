@@ -72,3 +72,15 @@ while True:
 ```
 
 The number in the ```VideoCapture``` is the webcam number you want to use. 
+
+## Basic Operations
+
+- **Resizing**
+```python
+resized_img = cv2.resize(img, (640, 640))
+```
+
+- **Cropping**
+```python
+cropped_img = img[120:240, 120:260]
+```
