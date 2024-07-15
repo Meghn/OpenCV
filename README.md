@@ -155,3 +155,44 @@ Many types of edge detection, namely:
 After edge detection you can erode or dilate the image.
 - **Erode** : The pixel is turned black if there are black pixels in its neighborhood
 - **Dilate** : The pixel is turned white if there are white pixels in its neighborhood
+
+## Drawing
+
+We'll draw using the help of OpenCV. Four most popular drawings are:
+- line
+    ```python
+    cv2.line(img, (100, 150), (300, 450), (0, 255, 0), 3)
+    ```
+    - Starting point: ```(100, 150)```
+    - Ending point: ```(300, 450)```
+    - Color: ```(0, 255, 0)```
+    - Thickness: ```3```
+
+- rectangle
+    ```python
+    cv2.rectangle(img, (200, 350), (450, 600), (0, 0, 255), -1)
+    ```
+    - Upper left corner: ```(200, 350)```
+    - Lower right corner: ```(450, 600)```
+    - Color: ```((0, 0, 255)```
+    - Thickness: ```-1``` this fills up the rectangle with solid color. Any positive non-zero value will give only the boundary of the rectangle.
+
+- circle
+    ```python
+    cv2.circle(img, (800, 200), 75, (255, 0, 0), 10)
+    ```
+    - Centre point: ```(800, 200)``` x-value is associated with the width and the y-value with the height.
+    - Radius: ```75```
+    - Color: ```(255, 0, 0)```
+    - Thickness: ```10```
+
+- text
+    ```python
+    cv2.putText(img, 'Hey you!', (600, 450), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 0), 10)
+    ```
+    - Text: ```'Hey you!'```
+    - Location: ```(600, 450)```
+    - Font: ```cv2.FONT_HERSHEY_SIMPLEX```
+    - Text Size: ```2```
+    - Color: ```(255, 255, 0)```
+    - Thickness: ```10```
