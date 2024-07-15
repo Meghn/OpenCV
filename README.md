@@ -141,4 +141,17 @@ We use thresholding for semantic segmentation.
     ```
     With ```ADAPTIVE_THRESH_GAUSSIAN_C``` the adaptive method and ```THRESH_BINARY``` the threshold type.
 
-    
+## Edge Detection
+
+Many types of edge detection, namely:
+- Sobel Operator
+- Laplacian Operator
+- Canny Edge Operator
+    ```python
+    img_edge = cv2.Canny(img, 100, 200)
+    ```
+    where ```100, 200``` are the min and max threshold we send to the canny edge detector.
+
+After edge detection you can erode or dilate the image.
+- **Erode** : The pixel is turned black if there are black pixels in its neighborhood
+- **Dilate** : The pixel is turned white if there are white pixels in its neighborhood
