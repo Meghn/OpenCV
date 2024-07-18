@@ -108,6 +108,15 @@ resized_img = cv2.resize(img, (640, 640))
 cropped_img = img[120:240, 120:260]
 ```
 
+## Setting Camera Parameters
+
+For the webcam capture we can set the width and height parameters as:
+
+```python
+webcam.set(3, 1000) # width
+webcam.set(4, 720) # height
+```
+
 ## Colorspaces
 
 All images loaded by OpenCV are in the **BGR** Format.
@@ -251,3 +260,18 @@ for cnt in contours:
 ```
 Where ```cv2.drawContours(img, cnt, -1, (0, 255, 0), 1)``` draws around such white regions 
 ```cv2.boundingRect(cnt)``` returns a rectangle that can contain the contours.
+
+## Mouse Events
+
+Some Events: **```'EVENT_FLAG_ALTKEY'```, ```'EVENT_FLAG_CTRLKEY'```, ```'EVENT_FLAG_LBUTTON'```, ```'EVENT_FLAG_MBUTTON'```, ```'EVENT_FLAG_RBUTTON'```, ```'EVENT_FLAG_SHIFTKEY'```, ```'EVENT_LBUTTONDBLCLK'```, ```'EVENT_LBUTTONDOWN'```, ```'EVENT_LBUTTONUP'```, ```'EVENT_MBUTTONDBLCLK'```,```'EVENT_MBUTTONDOWN'```, ```'EVENT_MBUTTONUP'```, ```'EVENT_MOUSEHWHEEL'```, ```'EVENT_MOUSEMOVE'```, ```'EVENT_MOUSEWHEEL'```, ```'EVENT_RBUTTONDBLCLK'```, ```'EVENT_RBUTTONDOWN'```, ```'EVENT_RBUTTONUP'```**
+
+To invoke a function on any mouse event we use the  ```cv2.setMouseCallback('image',click_event)``` method where ```click_event``` function can be defined as the following example:
+```python
+def click_event(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        print(f'X: {x}, Y: {y}')
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        text = f'({x}, {y})'
+        cv2.putText(img, text, (x, y), font, 1, (255, 255, 0), 2, cv2.LINE_AA)
+        cv2.imshow('image', img)
+```
