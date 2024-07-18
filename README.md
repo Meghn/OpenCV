@@ -220,6 +220,20 @@ We'll draw using the help of OpenCV. Four most popular drawings are:
     - Color: ```(255, 255, 0)```
     - Thickness: ```10```
 
+- Others
+    - Arrowed Line : ```cv2.arrowedLine(img, (100, 150), (300, 450), (0, 255, 0), 3)```
+    - Polygon
+    - Ellipse
+
+We can start off with just the numpy zeroes as a background instead of an image
+```python
+import numpy as np
+img = np.zeros([512,512,3], np.uint8)
+```
+This produces a black image.
+
+We can do the same for Videos as well.
+
 ## Contours
 
 All the borders of the isolated white regions in an image
