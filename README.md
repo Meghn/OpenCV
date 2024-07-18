@@ -36,6 +36,8 @@ cv2.waitKey(0)
 ```
 The ```waitKey``` keeps the image open indefinitely untill a key is pressed.
 
+![Second_Argument](./data/read_an_image.png)
+
 - **Video**
 ```python
 # read video
@@ -61,7 +63,7 @@ cv2.destroyAllWindows()
 - **Webcam**
 ```python
 # read webcam
-video = cv2.VideoCapture(1)
+video = cv2.VideoCapture(0)
 # visualize webcam
 while True:
     ret, frame = video.read()
