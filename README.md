@@ -144,7 +144,13 @@ dst = cv2.addWeighted(img,0.3,img_2,0.7,0)
 ```
 
 ## Bitwise Operations
-
+Very useful when working with masks. Masks are binary images that indicate the pixel in which an operation must be performed.
+```python
+bitAnd = cv2.bitwise_and(img2,img1)
+bitOr = cv2.bitwise_or(img2, img1)
+bitXOR = cv2.bitwise_xor(img2,img1)
+bitNot = cv2.bitwise_not(img2)
+```
 
 
 ## Setting Camera Parameters
