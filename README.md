@@ -98,6 +98,23 @@ while (webcam.isOpened()):
 
 ## Basic Operations
 
+- **Basic**
+```python
+print(f"Image shape: {img.shape}")
+print(f"Image size: {img.size}")
+print(f"Image data type: {img.dtype}")
+```
+
+-**Split**
+```python
+b, g, r = cv2.split(img)
+```
+
+-**Merge**
+```python
+new_img = cv2.merge((r, g, b))
+```
+
 - **Resizing**
 ```python
 resized_img = cv2.resize(img, (640, 640))
@@ -107,6 +124,28 @@ resized_img = cv2.resize(img, (640, 640))
 ```python
 cropped_img = img[120:240, 120:260]
 ```
+
+- ***Region of Interest***
+We can select some regions on an image called "region of interest".
+```python
+ball = img[280:340,330:390]
+
+img[273:333,100:160] = ball
+```
+The above code just selects a part of the image and puts it in another location on the same image.
+
+We use an add function which basically calculates the per-element sum of two arrays or an array and a scalar.
+```python
+dst = cv2.add(img, img_2)
+```
+Weighted Sum:
+```python
+dst = cv2.addWeighted(img,0.3,img_2,0.7,0)
+```
+
+## Bitwise Operations
+
+
 
 ## Setting Camera Parameters
 
