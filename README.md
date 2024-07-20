@@ -320,3 +320,23 @@ def click_event(event, x, y, flags, param):
         cv2.putText(img, text, (x, y), font, 1, (255, 255, 0), 2, cv2.LINE_AA)
         cv2.imshow('image', img)
 ```
+
+## Bind Trackbars to OpenCV Window
+
+Useful whever we want to change a value in an image dynamically at run time.
+
+- Create a named window
+```python
+cv2.namedWindow('image')
+```
+- Create a trackbar
+```python
+cv.createTrackbar('B', 'image', 0, 255, nothing)
+```
+where ```'B'``` = Trackbar name, ```'image'``` = Window name, ```0```,```255``` = Min and Max values, ```nothing``` = Function to be executed on triggering the trackbar event
+
+- Get the trackbar values
+```python
+b = cv.getTrackbarPos('B', 'image')
+```
+
