@@ -371,3 +371,28 @@ res = cv2.bitwise_and(frame, frame, mask=mask)
 ```
 
 ## MatPlotLib with OpenCV
+
+- OpenCV reads the image in the ```BGR``` format while Matplotlib reads an image in the ```RGB``` format.
+```python
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+plt.imshow(img)
+
+plt.xticks([]), plt.yticks([])
+plt.show()
+```
+- OpenCV image are shown in a static window wheras Matplotlib image are shown in a dynamic window.
+
+- To plot multiple images
+```python
+titles = ["Original Image", "BINARY", "BINARY_INV"]
+images = [img, th1, th2]
+
+for i in range(3):
+    plt.subplot(1,3, i+1)
+    plt.imshow(images[i], 'gray')
+    plt.title(titles[i])
+    plt.xticks([]), plt.yticks([])
+
+plt.show()
+```
+
