@@ -178,13 +178,17 @@ The ```HSV``` colorspace is very popular among other colorspaces offered by open
 Helpful to remove noise in an image.
 - __blur__ : Each pixel is the mean of its kernel neighbours
 - __gaussian blur__ : Convolve weach pixel with a gaussian kernel
-- __median blur__ : Central element is replaced by the median of the kernel neighbours. This operation processes the edges while removing noise.
+- __median blur__ : Central element is replaced by the median of the kernel neighbours. This operation processes the edges while removing noise. Effective in salt and pepper images
+- __bilateral filter__ : Bilateral filter.
 
 ```python
 k_size = 7
+kernel = np.ones((k_size, k_size), np.float32)/(k_size * k_size)
+img_filter = cv2.filter2D(img, -1, kernel)
 img_blur = cv2.blur(img, (k_size, k_size))
 img_gaussian_blur = cv2.GaussianBlur(img, (k_size, k_size), 5)
 img_median_blur = cv2.medianBlur(img, k_size)
+img_bilateral_filter = cv2.bilateralFilter(img, 9, 75, 75)
 ```
 
 ## Threshold
