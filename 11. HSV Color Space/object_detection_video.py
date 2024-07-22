@@ -6,6 +6,7 @@ def nothing(x):
     pass
 
 cv2.namedWindow('Tracking')
+
 cv2.createTrackbar('LH','Tracking', 0, 255, nothing)
 cv2.createTrackbar('LS','Tracking', 0, 255, nothing)
 cv2.createTrackbar('LV','Tracking', 0, 255, nothing)
@@ -18,9 +19,9 @@ cap = cv2.VideoCapture(0)
 
 while True:
     # frame = cv2.imread(path)
-    _, frame = cap.read()
+    ret, frame = cap.read()
 
-    if _ :
+    if ret:
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         
         l_h = cv2.getTrackbarPos('LH', 'Tracking')
@@ -41,8 +42,11 @@ while True:
         cv2.imshow('frame', frame)
         cv2.imshow('mask', mask)
         cv2.imshow('res', res)
-    k = cv2.waitKey(1)
-    if k == 27:
+    
+    # Break the loop on 'ESC' key press
+    key = cv2.waitKey(1) & 0xFF
+    if key == 27:  # ESC key
+        print("ESC key pressed, exiting...")
         break
 cap.release()
 cv2.destroyAllWindows()

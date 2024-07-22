@@ -202,7 +202,7 @@ We use thresholding for semantic segmentation. Thresholding is a form of segment
     ```python
     ret, thresh = cv2.threshold(img_gray, 80, 255, cv2.THRESH_BINARY)
     ```
-    where ```80``` is the threshold we are going to use where ant pixel value above 80 will become 255(or white) and below 80 will become 0(or black) and ```255``` is the maximum value of a pixel.
+    where ```80``` is the threshold we are going to use where ant pixel value above 80 will become 255(or white) and below 80 will become 0(or black) and ```255``` is the maximum value of a pixel. ```cv2.THRESH_BINARY``` is the type of threshold we apply.
 
     The output may not always be perfect so we just blur the resulting binary image and again send it through a threshold to get a better result.
     ```python
@@ -216,7 +216,7 @@ We use thresholding for semantic segmentation. Thresholding is a form of segment
     ```python
     adaptive_thresh = cv2.adaptiveThreshold(img_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 30)
     ```
-    With ```ADAPTIVE_THRESH_GAUSSIAN_C``` the adaptive method and ```THRESH_BINARY``` the threshold type.
+    With ```ADAPTIVE_THRESH_GAUSSIAN_C``` the adaptive method and ```THRESH_BINARY``` the threshold type. ```21``` is the block size which decides the size of the neighbourhood area and ```30``` is the constant that is used by the adaptive threshold function that is the C value.
 
 ## Edge Detection
 
@@ -370,3 +370,4 @@ mask = cv2.inRange(hsv, l_b, u_b)
 res = cv2.bitwise_and(frame, frame, mask=mask)
 ```
 
+## MatPlotLib with OpenCV
