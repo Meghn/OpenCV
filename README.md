@@ -191,13 +191,13 @@ img_median_blur = cv2.medianBlur(img, k_size)
 
 ![Thresholds](./data/Threshold.png)
 
-We use thresholding for semantic segmentation.
+We use thresholding for semantic segmentation. Thresholding is a form of segmentation technique used to seperate an object from its background.
 
 - **Simple Thresholding** : 
 
     For every pixel the same threshold value is applied.
 
-    We must first convert the colr image into grayscale.
+    We must first convert the color image into grayscale.
 
     ```python
     ret, thresh = cv2.threshold(img_gray, 80, 255, cv2.THRESH_BINARY)
@@ -338,5 +338,35 @@ where ```'B'``` = Trackbar name, ```'image'``` = Window name, ```0```,```255``` 
 - Get the trackbar values
 ```python
 b = cv.getTrackbarPos('B', 'image')
+```
+
+## Object Detection and Object Tracking using HSV Color Space
+
+> HSV (Hue, Saturation and Value)
+
+![HSV](./data/hsv.png)
+
+- Hue corresponds to the color components(base pigment)(0-360) 
+- Saturation is the amount of color(depth of the pigment)(dominance of hue)(0-100%)
+- Value is basically the brightness of the color (0-100%)
+
+
+```python
+hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
+l_h = cv2.getTrackbarPos('LH', 'Tracking')
+l_s = cv2.getTrackbarPos('LS', 'Tracking')
+l_v = cv2.getTrackbarPos('LV', 'Tracking')
+
+u_h = cv2.getTrackbarPos('UH', 'Tracking')
+u_s = cv2.getTrackbarPos('US', 'Tracking')
+u_v = cv2.getTrackbarPos('UV', 'Tracking')
+
+l_b = np.array([l_h,l_s,l_v])
+u_b = np.array([u_h,u_s,u_v])
+
+mask = cv2.inRange(hsv, l_b, u_b)
+
+res = cv2.bitwise_and(frame, frame, mask=mask)
 ```
 
