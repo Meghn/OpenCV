@@ -233,6 +233,44 @@ After edge detection you can erode or dilate the image.
 - **Erode** : The pixel is turned black if there are black pixels in its neighborhood
 - **Dilate** : The pixel is turned white if there are white pixels in its neighborhood
 
+## Morphological Transformation
+
+- Morphological transformations are some simple operations based on the image shape.
+- Morphological transformations are normally performed on binary images.
+- We need two things for morphological transformations. The first is the image an dthe second is the kernel.
+    A Kernel tells you how to change the value of any given pixel by combining it with different amounts of the neighboring pixels.
+
+**Dilation**
+```python
+kernal = np.ones((5,5), np.uint8)
+
+dilation = cv2.dilate(mask, kernal, iterations=2)
+```
+**Erosion**
+```python
+erosion = cv2.erode(mask, kernal, iterations=2)
+```
+**Opening**
+erosion followed by dilation
+```python
+opening = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernal)
+```
+**Closing**
+dilation followed by erossion
+```python
+closing = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernal)
+```
+**Morphological Gradient**
+dilute - erode
+```python
+morph_gradient = cv2.morphologyEx(mask, cv2.MORPH_GRADIENT, kernal)
+```
+**TopHat**
+img - open
+```python
+top_hat = cv2.morphologyEx(mask, cv2.MORPH_TOPHAT, kernal)
+```
+
 ## Drawing
 
 We'll draw using the help of OpenCV. Four most popular drawings are:
