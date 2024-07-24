@@ -105,12 +105,12 @@ print(f"Image size: {img.size}")
 print(f"Image data type: {img.dtype}")
 ```
 
--**Split**
+- **Split**
 ```python
 b, g, r = cv2.split(img)
 ```
 
--**Merge**
+- **Merge**
 ```python
 new_img = cv2.merge((r, g, b))
 ```
@@ -125,7 +125,7 @@ resized_img = cv2.resize(img, (640, 640))
 cropped_img = img[120:240, 120:260]
 ```
 
-- ***Region of Interest***
+- ***Region of Interest***  
 We can select some regions on an image called "region of interest".
 ```python
 ball = img[280:340,330:390]
@@ -143,7 +143,8 @@ Weighted Sum:
 dst = cv2.addWeighted(img,0.3,img_2,0.7,0)
 ```
 
-## Bitwise Operations
+### Bitwise Operations
+
 Very useful when working with masks. Masks are binary images that indicate the pixel in which an operation must be performed.
 ```python
 bitAnd = cv2.bitwise_and(img2,img1)
@@ -153,7 +154,7 @@ bitNot = cv2.bitwise_not(img2)
 ```
 
 
-## Setting Camera Parameters
+### Setting Camera Parameters
 
 For the webcam capture we can set the width and height parameters as:
 
@@ -233,11 +234,18 @@ Many types of edge detection, namely:
     ```
     where ```100, 200``` are the min and max threshold we send to the canny edge detector.
 
+**Canny Edge Detector** is an edge detector operator that uses a multi-stage algorithm to detect a wide range of edges in images. The algorithm is composed of 5 steps:
+1. Noise Reduction
+2. Gradient Calculation
+3. Non-maximum suppression
+4. Double Threshold
+5. Edge Tracking by Hysteresis
+
 After edge detection you can erode or dilate the image.
 - **Erode** : The pixel is turned black if there are black pixels in its neighborhood
 - **Dilate** : The pixel is turned white if there are white pixels in its neighborhood
 
-## Morphological Transformation
+### Morphological Transformation
 
 - Morphological transformations are some simple operations based on the image shape.
 - Morphological transformations are normally performed on binary images.
@@ -273,6 +281,27 @@ morph_gradient = cv2.morphologyEx(mask, cv2.MORPH_GRADIENT, kernal)
 img - open
 ```python
 top_hat = cv2.morphologyEx(mask, cv2.MORPH_TOPHAT, kernal)
+```
+
+### Image Gradient and Edge Detection
+
+An image gradient is a directional change in the intensity or color in an image.
+
+Gradient Methods:
+- Laplacian derivatives
+```python
+lap = cv2.Laplacian(img, cv2.CV_64F, ksize=1)
+lap = np.uint8(np.absolute(lap))
+```
+- SobelX method
+```python
+sobelx = cv2.Sobel(img, cv2.CV_64F, dx=1, dy=0)
+sobelx = np.uint8(np.absolute(sobelx))
+```
+- SobelY method
+```python
+sobely = cv2.Sobel(img, cv2.CV_64F, dx=0, dy=1)
+sobely = np.uint8(np.absolute(sobely))
 ```
 
 ## Drawing
