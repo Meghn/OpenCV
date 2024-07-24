@@ -467,3 +467,62 @@ for i in range(3):
 plt.show()
 ```
 
+## Image Pyramids
+
+Till now we have used images of constant size. But sometimes we need to work with images of different resolutions. For example, i want to search faces in images but the faces are of different sizes or resolution.  
+Pyramid or pyramid representation, is a type of multi-scale signal representation in which a signal or an image is subject to repeated smoothing and subsmapling.
+![Image Pyramid](./data/image_pyramid.png)
+
+There are two types of image pyramids available in OpenCV:
+1. Gaussian Pyramid: 
+- ```pyrDown```
+- ```pyrUp```
+2. Laplacian Pyramid:  
+A level in Laplacian pyramid is formed by the difference between that level in gaussian Pyramid and expandded version of its upper level in Gaussian Pyramid.  
+
+
+```python
+layer = img.copy()
+gaussian_pyramid = [layer]
+
+for i in range(6):
+    layer = cv2.pyrDown(layer)
+    gaussian_pyramid.append(layer)
+
+layer = gaussian_pyramid[-1]
+cv2.imshow("upper level Gaussian pyramid", layer)
+
+laplacian_pyramid = [layer]
+
+for i in range(5, 0, -1):
+    gaussian_extended = cv2.pyrUp(gaussian_pyramid[i])
+    laplacian = cv2.subtract(gaussian_pyramid[i - 1], gaussian_extended)
+    cv2.imshow(str(i), laplacian)
+```
+
+### Image Blending: Application of Image Pyramid
+
+1. Load the two images of apple and orange
+2. Find the Gaussian Pyramids for apple and orange (in the given example, number of levels = 6)
+3. From Gaussian Pyramids, find their Laplacian Pyramids
+4. Join the left half of apple and right half of orange in each level of Laplacian Pyramids
+5. From this joint image pyramids, reconstruct the original image
+
+```python
+# Add left and right halves of images in each level
+
+apple_orange_pyramid = []
+n = 0
+for apple_lap, orange_lap in zip(lp_apple, lp_orange):
+    n += 1
+    cols, rows, ch = apple_lap.shape
+    laplacian_combined = np.hstack((apple_lap[:, 0:int(cols/2)], orange_lap[:, int(cols/2):]))
+    apple_orange_pyramid.append(laplacian_combined)
+
+# Reconstruct the image
+
+apple_orange_reconstruct = apple_orange_pyramid[0].copy()
+for i in range(1, num_levels):
+    apple_orange_reconstruct = cv2.pyrUp(apple_orange_reconstruct)
+    apple_orange_reconstruct = cv2.add(apple_orange_pyramid[i], apple_orange_reconstruct)
+```
