@@ -598,3 +598,26 @@ for i in range(1, num_levels):
     apple_orange_reconstruct = cv2.pyrUp(apple_orange_reconstruct)
     apple_orange_reconstruct = cv2.add(apple_orange_pyramid[i], apple_orange_reconstruct)
 ```
+
+## 14. Understanding Image Histograms
+
+Histogram is a graph or a plot that gives an overall idea of the intensity distribution of an image.
+
+- **Using Matplotlib**
+
+```python
+plt.hist(b.ravel(), 256, [0, 256])
+plt.hist(g.ravel(), 256, [0, 256])
+plt.hist(r.ravel(), 256, [0, 256])
+plt.show()
+```
+
+- **OpenCV**
+
+```python
+hist = cv.calcHist([img],[0], mask=None, histSize=[256], ranges=[0,256])
+plt.plot(hist)
+plt.show()
+```
+
+Histogram can tell us whether the image has been properly exposed, whether the lighting conditions were flat or harsh,etc.
