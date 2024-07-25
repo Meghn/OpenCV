@@ -621,3 +621,23 @@ plt.show()
 ```
 
 Histogram can tell us whether the image has been properly exposed, whether the lighting conditions were flat or harsh,etc.
+
+## 15. Template Matching
+
+Method of searching and finding the location of a template image inside a larger image.
+
+![Template Matching method](./data/template_methods.png)
+
+```python
+res = cv2.matchTemplate(gray_img, template, cv2.TM_CCOEFF_NORMED)
+print(np.max(res))
+
+threshold = 0.9
+loc = np.where(res >= threshold)
+print(loc)
+
+w, h = template.shape[::-1] # column and row value in reverse order
+for pt in zip(*loc[::-1]):
+    cv2.rectangle(img, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+```
+Every method will give different results.
