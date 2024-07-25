@@ -22,7 +22,7 @@
     - In binary images, pixel value is in **[0,1]** ( or **[0,255]**).
     - In 16 bits images pixel value range from **0** to **65535**. (Generally 8 bits)
 
-## Input/Output
+## 1. Input/Output
 
 - __Image__
 ```python
@@ -96,7 +96,7 @@ while (webcam.isOpened()):
             break
 ```
 
-## Basic Operations
+## 2. Basic Operations
 
 - **Basic**
 ```python
@@ -143,7 +143,7 @@ Weighted Sum:
 dst = cv2.addWeighted(img,0.3,img_2,0.7,0)
 ```
 
-### Bitwise Operations
+### 2.1 Bitwise Operations
 
 Very useful when working with masks. Masks are binary images that indicate the pixel in which an operation must be performed.
 ```python
@@ -154,7 +154,7 @@ bitNot = cv2.bitwise_not(img2)
 ```
 
 
-### Setting Camera Parameters
+### 2.2 Setting Camera Parameters
 
 For the webcam capture we can set the width and height parameters as:
 
@@ -163,7 +163,7 @@ webcam.set(3, 1000) # width
 webcam.set(4, 720) # height
 ```
 
-## Colorspaces
+## 3. Colorspaces
 
 All images loaded by OpenCV are in the **BGR** Format.
 
@@ -174,7 +174,7 @@ img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 ```
 The ```HSV``` colorspace is very popular among other colorspaces offered by openCV and have a very important application (egs. color detection) in the computer vision field.
 
-## Blurring
+## 4. Blurring
 
 Helpful to remove noise in an image.
 - __blur__ : Each pixel is the mean of its kernel neighbours
@@ -192,7 +192,7 @@ img_median_blur = cv2.medianBlur(img, k_size)
 img_bilateral_filter = cv2.bilateralFilter(img, 9, 75, 75)
 ```
 
-## Threshold
+## 5. Threshold
 
 ![Thresholds](./data/Threshold.png)
 
@@ -223,7 +223,7 @@ We use thresholding for semantic segmentation. Thresholding is a form of segment
     ```
     With ```ADAPTIVE_THRESH_GAUSSIAN_C``` the adaptive method and ```THRESH_BINARY``` the threshold type. ```21``` is the block size which decides the size of the neighbourhood area and ```30``` is the constant that is used by the adaptive threshold function that is the C value.
 
-## Edge Detection
+## 6. Edge Detection
 
 Many types of edge detection, namely:
 - Sobel Operator
@@ -245,7 +245,7 @@ After edge detection you can erode or dilate the image.
 - **Erode** : The pixel is turned black if there are black pixels in its neighborhood
 - **Dilate** : The pixel is turned white if there are white pixels in its neighborhood
 
-### Morphological Transformation
+### 6.1 Morphological Transformation
 
 - Morphological transformations are some simple operations based on the image shape.
 - Morphological transformations are normally performed on binary images.
@@ -283,7 +283,7 @@ img - open
 top_hat = cv2.morphologyEx(mask, cv2.MORPH_TOPHAT, kernal)
 ```
 
-### Image Gradient and Edge Detection
+### 6.2 Image Gradient and Edge Detection
 
 An image gradient is a directional change in the intensity or color in an image.
 
@@ -304,7 +304,7 @@ sobely = cv2.Sobel(img, cv2.CV_64F, dx=0, dy=1)
 sobely = np.uint8(np.absolute(sobely))
 ```
 
-## Drawing
+## 7. Drawing
 
 We'll draw using the help of OpenCV. Four most popular drawings are:
 - line
@@ -359,9 +359,10 @@ This produces a black image.
 
 We can do the same for Videos as well.
 
-## Contours
+## 8. Contours
 
-All the borders of the isolated white regions in an image
+All the borders of the isolated white regions in an image. A curve joining all the continuous points along the boundary which are having the same color or intensity. Contours can be used for shape analysis, object detection or object recognition.  
+We use binary image to find the contours for better accuracy
 
 ```python
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -374,10 +375,81 @@ for cnt in contours:
 
         cv2.rectangle(img, (x1, y1), (x1 + w, y1 + h), (0, 255, 0), 2)
 ```
+```cv2.RETR_TREE``` = Contour MODE  
+```cv2.CHAIN_APPROX_SIMPLE``` = Contour approximation method  
+
+```contours``` is a python list of all the contours in the image. Each individual contour is a numpy array of (x,y) coordinates of boundary points of the object.
+```hierarchy`` contains information about image topology
+
+
 Where ```cv2.drawContours(img, cnt, -1, (0, 255, 0), 1)``` draws around such white regions 
 ```cv2.boundingRect(cnt)``` returns a rectangle that can contain the contours.
 
-## Mouse Events
+### 8.1 Applications Using Contours
+
+***Motion Detection***
+
+```python
+ret, frame1 = cap.read()
+ret, frame2 = cap.read()
+
+
+while cap.isOpened():
+    diff = cv2.absdiff(frame1, frame2)
+    gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (5,5), 0)
+    _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)
+    dilated = cv2.dilate(thresh, None, iterations=3)
+    contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    for cnt in contours:
+        x, y, w, h = cv2.boundingRect(cnt)
+        if cv2.contourArea(cnt)<5000:
+            continue
+        cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        cv2.putText(frame1, f"Status : {"Movement"}", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+    cv2.imshow("feed", frame1)
+
+    # Replacing the frame1 and frame2
+    frame1 = frame2
+    ret, frame2 = cap.read()
+    if not ret:
+        break
+    
+    if cv2.waitKey(10) == 27:
+        break
+```
+
+***Shape Detection***
+```python
+for cnt in contours:
+    # get the polygon curve
+    approx = cv2.approxPolyDP(cnt, 0.01 * cv2.arcLength(cnt, True), True)
+    cv2.drawContours(img, [approx], 0, (0, 0, 0), 5)
+    
+    # print the shape name hence get the x and y coordinates
+    x = approx.ravel()[0]
+    y = approx.ravel()[1]
+
+    # determine shape by number of sides
+    if len(approx) == 3:
+        cv2.putText(img, "Triangle", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
+    elif len(approx) == 4:
+        x, y, w, h = cv2.boundingRect(approx)
+        aspect_ratio = float(w) / h
+        if aspect_ratio >= 0.95 and aspect_ratio <= 1.05:
+            cv2.putText(img, "Square", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0,0,0))
+        else:
+            cv2.putText(img, "Rectangle", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, ( 0,0,0))
+    elif len(approx) == 5:
+        cv2.putText(img, "Pentagon", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
+    elif len(approx) == 10:
+        cv2.putText(img, "Star", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
+    else:
+        cv2.putText(img, "Circle", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
+```
+
+
+## 9. Mouse Events
 
 Some Events: **```'EVENT_FLAG_ALTKEY'```, ```'EVENT_FLAG_CTRLKEY'```, ```'EVENT_FLAG_LBUTTON'```, ```'EVENT_FLAG_MBUTTON'```, ```'EVENT_FLAG_RBUTTON'```, ```'EVENT_FLAG_SHIFTKEY'```, ```'EVENT_LBUTTONDBLCLK'```, ```'EVENT_LBUTTONDOWN'```, ```'EVENT_LBUTTONUP'```, ```'EVENT_MBUTTONDBLCLK'```,```'EVENT_MBUTTONDOWN'```, ```'EVENT_MBUTTONUP'```, ```'EVENT_MOUSEHWHEEL'```, ```'EVENT_MOUSEMOVE'```, ```'EVENT_MOUSEWHEEL'```, ```'EVENT_RBUTTONDBLCLK'```, ```'EVENT_RBUTTONDOWN'```, ```'EVENT_RBUTTONUP'```**
 
@@ -392,7 +464,7 @@ def click_event(event, x, y, flags, param):
         cv2.imshow('image', img)
 ```
 
-## Bind Trackbars to OpenCV Window
+## 10. Bind Trackbars to OpenCV Window
 
 Useful whever we want to change a value in an image dynamically at run time.
 
@@ -411,7 +483,7 @@ where ```'B'``` = Trackbar name, ```'image'``` = Window name, ```0```,```255``` 
 b = cv.getTrackbarPos('B', 'image')
 ```
 
-## Object Detection and Object Tracking using HSV Color Space
+## 11. Object Detection and Object Tracking using HSV Color Space
 
 > HSV (Hue, Saturation and Value)
 
@@ -441,7 +513,7 @@ mask = cv2.inRange(hsv, l_b, u_b)
 res = cv2.bitwise_and(frame, frame, mask=mask)
 ```
 
-## MatPlotLib with OpenCV
+## 12. MatPlotLib with OpenCV
 
 - OpenCV reads the image in the ```BGR``` format while Matplotlib reads an image in the ```RGB``` format.
 ```python
@@ -467,7 +539,7 @@ for i in range(3):
 plt.show()
 ```
 
-## Image Pyramids
+## 13. Image Pyramids
 
 Till now we have used images of constant size. But sometimes we need to work with images of different resolutions. For example, i want to search faces in images but the faces are of different sizes or resolution.  
 Pyramid or pyramid representation, is a type of multi-scale signal representation in which a signal or an image is subject to repeated smoothing and subsmapling.
@@ -500,7 +572,7 @@ for i in range(5, 0, -1):
     cv2.imshow(str(i), laplacian)
 ```
 
-### Image Blending: Application of Image Pyramid
+### 13.1 Image Blending: Application of Image Pyramid
 
 1. Load the two images of apple and orange
 2. Find the Gaussian Pyramids for apple and orange (in the given example, number of levels = 6)
