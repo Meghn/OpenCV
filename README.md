@@ -641,3 +641,69 @@ for pt in zip(*loc[::-1]):
     cv2.rectangle(img, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
 ```
 Every method will give different results.
+
+## 16. The Hough Transform
+
+The hough Transform is a popular technique to detect any shape, if you can represent that shape in a mathematical form. It can detect the shape even if it is broken or distortrd a little bit.
+
+A line in the image space can be expressed with two variables.   
+- Cartesian coordinate system:  y = mx + c
+- Point coordinate system: x $\cos$ $\theta$ + y $\sin$ $\theta$ = r
+
+**Cartesian coordinate system**
+
+![hough_space](./data/hough_space.png)
+A line in the xy space can be represented as a point in the mc space. Managing a single point is easier than managing a collection of points.  
+![mc_space](./data/mc_space.png)
+A point in the xy space can be represented as a line in the mc space. 
+
+![How does this help us?](./data/how_help.png)
+Converting points in the xy space and represent them as lines in the mc space. Represent points in the mc space as lines and use the intersection point in the mc space to draw a line in the xy space.
+
+**Polar coordinate system**
+
+![Polar Coordinate System](./data/polar_system.png)
+xy space to r $\theta$ space.
+
+Example:
+![Example](./data/polar_example.png)
+One point representation
+
+![Example_2](./data/polar_example_2.png)
+Three Point Representation. The intersection is going to represent a line in the xy space
+
+***The Cartesian coordinate system cannot represent vertical lines, hence we use the polar coordinate system to represent them***  
+
+**Hough Transformation Algorithm**
+1. Edge Detection, e.g. using the canny edge detector.
+2. Mapping of edge points to the Hough space and storage in an accumulator
+3. Interpretation of the accumulator to yield lines of infinite length. The interpretation is done by thresholding and possibly other constraints
+4. Conversion of infinite lines to finite lines
+
+**OpenCV implements two kinds of Hough Line Transforms**:  
+- Standard Hough Transform (HoughLines method)
+- Probabilistic Hough Line Transform (HoughLinesP method)
+
+### 16.1 Hough Line Transformation
+
+```python
+lines = cv2.HoughLinesP(edges, 1, np.pi/180, 200)
+```
+where,
+- ```edges``` : source image
+- ```lines``` : Output vector of lines. Each line is represented by a 2 or 3 element vector ($\rho$, $\theta$) or ($\rho$, $\theta$, votes).
+- ```1``` : rho: Distance resolution of the accumulator in pixels. Normally taken as 1.
+-  ```np.pi/180``` : theta: Angle resolution of the accumulator in radians
+- ```200``` : threshold: Accumulator threshold parameter. Only those lines are returned that get enough votes
+
+These lines will be in the polar coordinate.
+
+### 16.2 Probabilistic Hough Line Transformation
+
+```python
+lines = cv2.HoughLinesP(edges, 1, np.pi/180, 100, minLineLength=100, maxLineGap=10)
+```
+where,
+- ```minLineLength = 100``` : Minimum length of line. Line segments shorter than this are rejected
+- ```maxLineGap = 10``` : Maximum allowed gap between line segments to treat them as a single line
+
